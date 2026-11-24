@@ -9,11 +9,35 @@ import FavButton from '../components/FavButton.jsx';
 const SORTS = ['price_asc', 'price_desc', 'name_asc'];
 
 function CategoryTree({ params, setParamsObj, lang, tree }) {
+  const { t } = useI18n();
   const active1 = params.get('cat1');
   const active2 = params.get('cat2');
   const active3 = params.get('cat3');
   const [open1, setOpen1] = useState(() => new Set());
   const [open2, setOpen2] = useState(() => new Set());
+  const [fq, setFq] = useState('');
+  const filtering = fq.trim().length > 0;
+  // 分类关键词过滤：三语节点名任一含关键词即保留；父级只要有存活子孙就保留并自动展开。
+  // 官方分类名冗长且归组意外（豆奶挂在「奶類及乳製品」下），直接翻很难找到。
+  const shown = useMemo(() => {
+    if (!filtering) return tree;
+    const kw = fq.trim().toLowerCase();
+    const m = (n) => [n.name_en, n.name_zh_hant, n.name_zh_hans].some((x) => (x ?? '').toLowerCase().includes(kw));
+    const out = [];
+    for (const n1 of tree) {
+      const l2s = [];
+      for (const n2 of n1.l2) {
+        if (m(n2)) l2s.push(n2);
+        else {
+          const l3s = n2.l3.filter(m);
+          if (l3s.length) l2s.push({ ...n2, l3: l3s });
+        }
+      }
+      if (l2s.length) out.push({ ...n1, l2: l2s });
+      else if (m(n1)) out.push(n1);
+    }
+    return out;
+  }, [tree, fq, filtering]);
   const setOpen = (set, setter, key, on) => {
     const next = new Set(set);
     if (on) next.add(key);
@@ -23,9 +47,17 @@ function CategoryTree({ params, setParamsObj, lang, tree }) {
 
   return (
     <div className="tree">
-      {tree.map((n1) => {
+      <input
+        className="tree-filter"
+        value={fq}
+        onChange={(e) => setFq(e.target.value)}
+        placeholder={t('search.catFilter')}
+        aria-label="filter categories"
+      />
+      {filtering && shown.length === 0 && <p className="tree-empty">{t('search.catNoMatch')}</p>}
+      {shown.map((n1) => {
         const k1 = n1.name_zh_hant;
-        const expanded1 = open1.has(k1) || active1 === k1;
+        const expanded1 = filtering || open1.has(k1) || active1 === k1;
         return (
           <div className="tree-l1" key={k1}>
             <button
@@ -46,7 +78,7 @@ function CategoryTree({ params, setParamsObj, lang, tree }) {
             {expanded1 && n1.l2.map((n2) => {
               const k2 = n2.name_zh_hant;
               const key2 = `${k1}|${k2}`;
-              const expanded2 = open2.has(key2) || active2 === k2;
+              const expanded2 = filtering || open2.has(key2) || active2 === k2;
               return (
                 <div className="tree-l2" key={k2}>
                   <button

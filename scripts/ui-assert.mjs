@@ -79,6 +79,27 @@ await page.locator('.tree-label3').first().click();
 await page.waitForTimeout(600);
 ok('再点叶子标签取消 cat3', !(await page.evaluate(() => location.hash)).includes('cat3='));
 
+// 分类树关键词筛选（豆奶藏在奶類下难以翻到）
+await page.goto(`${BASE}/#/`, { waitUntil: 'networkidle' });
+await page.waitForSelector('.item-row');
+await page.fill('input[aria-label="filter categories"]', '豆奶');
+await page.waitForTimeout(400);
+const l1t = await page.locator('.tree-label1').allInnerTexts();
+ok('分类筛选：只剩命中分支（奶類及乳製品）', l1t.length === 1 && l1t[0].includes('奶類及乳製品'));
+ok('分类筛选：豆漿/豆奶 节点自动展开可见',
+  (await page.locator('.tree-label2').allInnerTexts()).some((s) => s.includes('豆漿')));
+await page.locator('.tree-label3', { hasText: '豆奶' }).first().click();
+await page.waitForTimeout(700);
+ok('分类筛选后点叶子即列商品', (await page.locator('.item-row').count()) > 0
+  && (await page.evaluate(() => location.hash)).includes('cat3='));
+await page.fill('input[aria-label="filter categories"]', '不存在xyz');
+await page.waitForTimeout(300);
+ok('分类筛选无匹配提示', (await page.locator('.tree-empty').count()) === 1);
+await page.fill('input[aria-label="filter categories"]', '');
+await page.waitForTimeout(300);
+ok('清空即恢复全树', (await page.locator('.tree-label1').count()) > 5
+  && (await page.locator('.tree-empty').count()) === 0);
+
 // 5. 详情页双高亮：正价最平（绿 .best）+ 优惠后最平（紫 .best-eff），P000000002 两者不同行
 await page.goto(`${BASE}/#/product/P000000002`, { waitUntil: 'networkidle' });
 await page.waitForSelector('table.cmp');
