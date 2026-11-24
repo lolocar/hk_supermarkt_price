@@ -35,10 +35,10 @@ node scripts/import-history.mjs [目錄]   # 匯入歷史 pricewatch.json 快照
 
 ## 遠端存取
 
-服務預設綁定 `0.0.0.0:4321`，同一網絡內可直接存取：
+服務預設綁定 `0.0.0.0:4321`，同一網絡內可直接存取 `http://<主機 IP>:4321`：
 
-- 區域網絡：`http://<LAN-IP>:4321`
-- Tailscale：`http://<Tailscale-IP>:4321`
+- 區域網絡 IP：`hostname -I` 查詢
+- Tailscale IP：`tailscale ip -4` 查詢（本機實際地址記錄在倉庫外的 `DEPLOY.local.md`，不入 git）
 
 監聽地址/端口用環境變數調整：`HOST`（預設 `0.0.0.0`；設 `127.0.0.1` 可關閉遠端）、`PORT`（預設 `4321`）。無認證，只應在可信網絡內開放。
 
