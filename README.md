@@ -1,85 +1,85 @@
-# HK 超市格价 HK Price Watch
+# HK 超市格價 HK Price Watch
 
-基于消费者委员会「格价资讯通」每日开放数据的超市比价 Web 应用。
+基於消費者委員會「格價資訊通」每日開放數據的超市比價 Web 應用。
 
-- 数据源：`https://online-price-watch.consumer.org.hk/opw/opendata/pricewatch.json`
-- 数据字典：`docs/pricewatch_data_dictionary.pdf`（提取文本见 `docs/dictionary.txt`）
-- 数据库方案（已确认）：SQLite + 浏览器 localStorage 关注 → [docs/DB_SCHEMA.md](docs/DB_SCHEMA.md)
+- 數據源：`https://online-price-watch.consumer.org.hk/opw/opendata/pricewatch.json`
+- 數據字典：`docs/pricewatch_data_dictionary.pdf`（提取文本見 `docs/dictionary.txt`）
+- 資料庫方案（已確認）：SQLite + 瀏覽器 localStorage 關注 → [docs/DB_SCHEMA.md](docs/DB_SCHEMA.md)
 
-## 致谢 Acknowledgement
+## 致謝 Acknowledgement
 
-此应用使用源自 [DATA.GOV.HK](https://data.gov.hk/) 的数据：[「格價資訊通 Online Price Watch」数据集](https://data.gov.hk/tc-data/dataset/cc-pricewatch-pricewatch)（数据提供机构：消费者委员会）。使用该数据须受 DATA.GOV.HK [免责条款](https://www.data.gov.hk/tc/terms-and-conditions)约束——政府、政策创新与统筹办事处、数字政策办公室及数据供应商不会就数据的准确性、可靠性或适时性承担法律责任。This application uses data from [DATA.GOV.HK](https://data.gov.hk/), subject to its [terms and conditions](https://www.data.gov.hk/en/terms-and-conditions).
+此應用使用源自 [DATA.GOV.HK](https://data.gov.hk/) 的數據：[「格價資訊通 Online Price Watch」數據集](https://data.gov.hk/tc-data/dataset/cc-pricewatch-pricewatch)（數據提供機構：消費者委員會）。使用該數據須受 DATA.GOV.HK [免責條款](https://www.data.gov.hk/tc/terms-and-conditions)約束——政府、政策創新與統籌辦事處、數字政策辦公室及數據供應商不會就數據的準確性、可靠性或適時性承擔法律責任。This application uses data from [DATA.GOV.HK](https://data.gov.hk/), subject to its [terms and conditions](https://www.data.gov.hk/en/terms-and-conditions).
 
 ## 功能
 
-1. 三语界面：繁體中文 / 简体中文 / English（商品名、超市名、分类均按语言展示，数据自带三语）
-2. 商品分类三级树筛选（点分类标签即展开/关闭并选中，再点取消）+ 文字搜索（FTS5 trigram，支持三语，空格分词各词独立匹配品牌或品名；短词自动回退 LIKE）+ 超市多选筛选
-3. 同一货品（按官方 `code`）跨 9 间超市比价，按实际售价从低到高排列；**双高亮**：正价最平一行青绿色、优惠后最平一行紫色（「買N件$X / 買N件慳$Y」解析成每件实际价），带图例
-4. 商品详情页价格走势图（Chart.js，7/14/30 天，**优惠价/正价两种口径切换**，默认按多件优惠折算后的每件实付价；缺价可能只是商店未上报数据，页面有提示）
-5. 服务端 `node-cron` 每日 03:00 HKT 抓取，保留 30 天；启动缺当日快照自动补抓；页脚可手动触发
-6. 浅色 / 深色主题（跟随系统，可手动切换并记住）
-7. 商品关注（localStorage），顶部导航直达关注列表
-8. 手机版页面：窄屏自适应；桌面顶栏 📱 一键切换手机版布局（480px 窄列、筛选栏折叠为抽屉），选择跨页面记忆
+1. 三語介面：繁體中文 / 简体中文 / English（商品名、超市名、分類均按語言展示，數據自帶三語）
+2. 商品分類三級樹篩選（點分類標籤即展開/關閉並選中，再點取消）+ 文字搜尋（FTS5 trigram，支援三語，空格分詞各詞獨立匹配品牌或品名；短詞自動回退 LIKE）+ 超市多選篩選
+3. 同一貨品（按官方 `code`）跨 9 間超市比價，按實際售價由低到高排列；**雙高亮**：正價最平一行青綠色、優惠後最平一行紫色（「買N件$X / 買N件慳$Y」解析成每件實際價），附圖例
+4. 商品詳情頁價格走勢圖（Chart.js，7/14/30 天，**優惠價/正價兩種口徑切換**，預設按多件優惠折算後的每件實付價；缺價可能只是商店未有上報數據，頁面有提示）
+5. 服務端 `node-cron` 每日 03:00 HKT 抓取，保留 30 天；啟動時缺當日快照自動補抓；頁腳可手動觸發
+6. 淺色 / 深色主題（跟隨系統，可手動切換並記住）
+7. 商品關注（localStorage），頂部導航直達關注列表
+8. 手機版頁面：窄屏自適應；桌面頂欄 📱 一鍵切換手機版佈局（480px 窄欄、篩選欄摺疊為抽屜），選擇跨頁面記憶
 
-## 运行
+## 運行
 
 ```sh
 npm install
-npm run build      # 构建前端到 client/dist
-npm start          # 前台起服务：http://localhost:4321（含每日 03:00 HKT 定时抓取）
-npm run collect    # 手动灌一次当日数据
-node scripts/import-history.mjs [目录]   # 导入历史 pricewatch.json 快照（默认 /home/user00/pricewatch_data）
+npm run build      # 構建前端到 client/dist
+npm start          # 前台起服務：http://localhost:4321（含每日 03:00 HKT 定時抓取）
+npm run collect    # 手動灌一次當日數據
+node scripts/import-history.mjs [目錄]   # 匯入歷史 pricewatch.json 快照（預設 /home/user00/pricewatch_data）
 ```
 
-前端开发模式：`npm run dev:client`（Vite 代理 /api → 4321）。
+前端開發模式：`npm run dev:client`（Vite 代理 /api → 4321）。
 
-## 远端访问
+## 遠端存取
 
-服务默认绑定 `0.0.0.0:4321`，同一网络内可直接访问：
+服務預設綁定 `0.0.0.0:4321`，同一網絡內可直接存取：
 
-- 局域网：`http://<LAN-IP>:4321`
+- 區域網絡：`http://<LAN-IP>:4321`
 - Tailscale：`http://<Tailscale-IP>:4321`
 
-监听地址/端口用环境变量调整：`HOST`（默认 `0.0.0.0`；设 `127.0.0.1` 可关远端）、`PORT`（默认 `4321`）。无鉴权，仅限可信网络暴露。
+監聽地址/端口用環境變數調整：`HOST`（預設 `0.0.0.0`；設 `127.0.0.1` 可關閉遠端）、`PORT`（預設 `4321`）。無認證，只應在可信網絡內開放。
 
-## 服务管理（拉起命令）
+## 服務管理（啟動命令）
 
-常驻服务为 systemd **用户级**单元 `hmw`（已 `enable`，linger 已开：开机自启、无需登录会话）：
+常駐服務為 systemd **使用者級**單元 `hmw`（已 `enable`，linger 已開：開機自啟、無需登入工作階段）：
 
 ```sh
-systemctl --user start hmw      # 拉起
+systemctl --user start hmw      # 啟動
 systemctl --user stop hmw       # 停止
-systemctl --user restart hmw    # 重启（改代码 / 重新构建后用这个）
-systemctl --user status hmw     # 查看状态
-journalctl --user -u hmw -f     # 跟踪日志
+systemctl --user restart hmw    # 重啟（改代碼 / 重新構建後用這個）
+systemctl --user status hmw     # 查看狀態
+journalctl --user -u hmw -f     # 追蹤日誌
 ```
 
-改完前后端的完整发布流程：
+改完前後端的完整發佈流程：
 
 ```sh
 cd /home/user00/deepseek-harness/hk_supermarket_watch
 npm run build                   # 重建前端到 client/dist
-systemctl --user restart hmw    # 重启服务
-curl -s localhost:4321/api/health   # 应返回 {"ok":true,"latestDate":"YYYY-MM-DD"}
+systemctl --user restart hmw    # 重啟服務
+curl -s localhost:4321/api/health   # 應返回 {"ok":true,"latestDate":"YYYY-MM-DD"}
 ```
 
-端口被手工起的进程占用时：`fuser -k 4321/tcp` 再 `systemctl --user restart hmw`。
+端口被手動啟動的進程佔用時：`fuser -k 4321/tcp` 再 `systemctl --user restart hmw`。
 
-## 结构
+## 結構
 
 ```
-server/    Express + node:sqlite（无原生依赖）：db.js schema、collect.js 收集器、index.js API/定时/静态
-client/    React 19 + Vite：三语 i18n、主题、搜索/比价/走势图/关注
-scripts/   ui-smoke.mjs（Playwright 截图）、ui-assert.mjs（44 项 DOM 断言）、import-history.mjs（历史导入）
-data/      SQLite 数据库（WAL）
-docs/      数据字典文本、数据库方案
+server/    Express + node:sqlite（無原生依賴）：db.js schema、collect.js 收集器、index.js API/定時/靜態
+client/    React 19 + Vite：三語 i18n、主題、搜尋/比價/走勢圖/關注
+scripts/   ui-smoke.mjs（Playwright 截圖）、ui-assert.mjs（45 項 DOM 斷言）、import-history.mjs（歷史匯入）
+data/      SQLite 資料庫（WAL）
+docs/      數據字典文本、資料庫方案
 ```
 
-## 测试
+## 測試
 
-服务端与 API 起好后：
+服務端與 API 起好後：
 
 ```sh
-node scripts/ui-assert.mjs   # 排序、筛选、比价、图表、关注、三语、主题、窄屏断言
-node scripts/ui-smoke.mjs    # 交互流程截图到 scripts/shots/
+node scripts/ui-assert.mjs   # 排序、篩選、比價、圖表、關注、三語、主題、窄屏斷言
+node scripts/ui-smoke.mjs    # 互動流程截圖到 scripts/shots/
 ```
