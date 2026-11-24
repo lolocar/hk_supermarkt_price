@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HK 超市格價 HK Price Watch</title>
+    <meta name="description" content="香港超市每日格價比較 · 數據來自消委會格價資訊通" />
+    <script>
+      // 主题与手机版视图在首帧前落到 <html>，避免闪白/闪黑
+      (function () {
+        try {
+          var t = localStorage.getItem('hmw.theme');
+          if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.dataset.theme = t;
+          if (localStorage.getItem('hmw.mobile') === '1') document.documentElement.dataset.mobile = '1';
+        } catch (e) { document.documentElement.dataset.theme = 'light'; }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

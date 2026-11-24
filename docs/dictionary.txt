@@ -1,0 +1,309 @@
+                                     Data Specification for Online Price Watch
+                                            格價資訊通的資料格式
+                                            格价资讯通的资料格式
+
+The dataset provides information of product prices and discount offers gathered from Online Price Watch in CSV and
+JSON format
+此資料集以 CSV 及 JSON 格式提供有關從格價資訊通取得之貨品價格及優惠
+此资料集以 CSV 及 JSON 格式提供有关从格价资讯通取得之货品价格及优惠
+
+CSV format / CSV 格式 / CSV 格式
+
+ Item / 項目 / 项目                        Description / 說明 / 说明                     Note / 細節 / 细节
+ Category 1                            Name of Product Category Level 1          Data Type: Text
+ 貨品分類 1                                第一層貨品分類的名稱                                資料類型: 文字
+ 货品分类 1                                第一层货品分类的名称                                资料类型: 文字
+
+ Category 2                            Name of Product Category Level 2          Data Type: Text
+ 貨品分類 2                                第二層貨品分類的名稱                                資料類型: 文字
+ 货品分类 2                                第二层货品分类的名称                                资料类型: 文字
+
+ Category 3                            Name of Product Category Level 3          Data Type: Text
+ 貨品分類 3                                第三層貨品分類的名稱                                資料類型: 文字
+ 货品分类 3                                第三层货品分类的名称                                资料类型: 文字
+
+ Product Code                          Product Code used in Online Price         Data Type: Text
+ 貨品編號                                  Watch                                     資料類型: 文字
+ 货品编号                                  於格價資訊通內使用的貨品編                             资料类型: 文字
+                                       號
+                                       于格价资讯通内使用的货品编
+                                       号
+
+ Brand                                 Product Brand Name                        Data Type: Text
+ 品牌                                    貨品品牌名稱                                    資料類型: 文字
+ 品牌                                    货品品牌名称                                    资料类型: 文字
+
+ Product Name                          Product Name                              Data Type: Text
+ 貨品名稱                                  貨品名稱                                      資料類型: 文字
+ 货品名称                                  货品名称                                      资料类型: 文字
+Item / 項目 / 项目     Description / 說明 / 说明                Note / 細節 / 细节
+Supermarket Code   Supermarket code listed as follow.   Data Type: Text
+超市代號               超市代號資料如下。                            資料類型:文字
+超市代号               超市代号资料如下。                            资料类型:文字
+
+                       •    WELLCOME
+                            Wellcome
+                            惠康
+                            惠康
+
+                       •    PARKNSHOP
+                            PARKnSHOP
+                            百佳
+                            百佳
+
+                       •    JASONS
+                            Market Place
+                            Market Place
+                            Market Place
+
+                       •    WATSONS
+                            Watsons
+                            屈臣氏
+                            屈臣氏
+
+                       •    MANNINGS
+                            Mannings
+                            萬寧
+                            万宁
+
+                       •    AEON
+                            AEON
+                            AEON
+                            AEON
+
+                       •    DCHFOOD
+                            DCH Food Mart
+                            大昌食品
+                            大昌食品
+
+                       •    SASA
+                            Sasa
+                            莎莎
+                            莎莎
+
+                       •    LUNGFUNG
+                            Lung Fung
+                            龍豐
+                            龙丰
+Item / 項目 / 项目   Description / 說明 / 说明                Note / 細節 / 细节
+Price            Product single price in the chain.   Data Type: Numeric
+價格               於該超市的貨品單件價格。                         資料類型: 數字
+价格               于该超市的货品单件价格。                         资料类型: 数字
+
+Offers           Discount offers in the chain,        Data Type: Text
+優惠               separated by forward slash (/).      資料類型: 文字
+优惠               於該超市的貨品優惠，以斜線                        资料类型: 文字
+                 (/) 分隔。
+                 于该超市的货品优惠，以斜线
+                 (/) 分隔。
+JSON format / JSON 格式 / JSON 格式
+
+ Item / 項目 / 项目                   Description / 說明 / 说明               Note / 細節 / 细节
+ code                             Product Code used in Online Price   Data Type: Text
+                                  Watch                               資料類型: 文字
+                                  於格價資訊通內使用的貨品編                       资料类型: 文字
+                                  號
+                                  于格价资讯通内使用的货品编
+                                  号
+
+ brand                            Product Brand Name                  Data Type: Text
+                                  貨品品牌名稱                              資料類型: 文字
+     •   en                       货品品牌名称                              资料类型: 文字
+     •   zh-Hant
+     •   zh-Hans                      •    English
+                                           英文
+                                           英文
+
+                                      •    Traditional Chinese
+                                           繁體中文
+                                           繁体中文
+
+                                      •    Simplified Chinese
+                                           簡體中文
+                                           简体中文
+
+ name                             Product Brand Name                  Data Type: Text
+                                  貨品品牌名稱                              資料類型: 文字
+     •   en                       货品品牌名称                              资料类型: 文字
+     •   zh-Hant
+     •   zh-Hans                      •    English
+                                           英文
+                                           英文
+
+                                      •    Traditional Chinese
+                                           繁體中文
+                                           繁体中文
+
+                                      •    Simplified Chinese
+                                           簡體中文
+                                           简体中文
+Item / 項目 / 项目   Description / 說明 / 说明              Note / 細節 / 细节
+cat1Name         Name of Product Category Level 1   Data Type: Text
+                 第一層貨品分類的名稱                         資料類型: 文字
+   •   en        第一层货品分类的名称                         资料类型: 文字
+   •   zh-Hant
+   •   zh-Hans       •   English
+                         英文
+                         英文
+
+                     •   Traditional Chinese
+                         繁體中文
+                         繁体中文
+
+                     •   Simplified Chinese
+                         簡體中文
+                         简体中文
+
+cat2Name         Name of Product Category Level 2   Data Type: Text
+                 第二層貨品分類的名稱                         資料類型: 文字
+   •   en        第二层货品分类的名称                         资料类型: 文字
+   •   zh-Hant
+   •   zh-Hans       •   English
+                         英文
+                         英文
+
+                     •   Traditional Chinese
+                         繁體中文
+                         繁体中文
+
+                     •   Simplified Chinese
+                         簡體中文
+                         简体中文
+
+cat3Name         Name of Product Category Level 3   Data Type: Text
+                 第三層貨品分類的名稱                         資料類型: 文字
+   •   en        第三层货品分类的名称                         资料类型: 文字
+   •   zh-Hant
+   •   zh-Hans       •   English
+                         英文
+                         英文
+
+                     •   Traditional Chinese
+                         繁體中文
+                         繁体中文
+
+                     •   Simplified Chinese
+                         簡體中文
+                         简体中文
+Item / 項目 / 项目           Description / 說明 / 说明                Note / 細節 / 细节
+prices                   Supermarket code listed as follow.   Data Type: Text
+                         超市代號資料如下。                            資料類型:文字
+   •   supermarketCode   超市代号资料如下。                            资料类型:文字
+
+                             •    WELLCOME
+                                  Wellcome
+                                  惠康
+                                  惠康
+
+                             •    PARKNSHOP
+                                  PARKnSHOP
+                                  百佳
+                                  百佳
+
+                             •    JASONS
+                                  Market Place
+                                  Market Place
+                                  Market Place
+
+                             •    WATSONS
+                                  Watsons
+                                  屈臣氏
+                                  屈臣氏
+
+                             •    MANNINGS
+                                  Mannings
+                                  萬寧
+                                  万宁
+
+                             •    AEON
+                                  AEON
+                                  AEON
+                                  AEON
+
+                             •    DCHFOOD
+                                  DCH Food Mart
+                                  大昌食品
+                                  大昌食品
+
+                             •    SASA
+                                  Sasa
+                                  莎莎
+                                  莎莎
+
+                             •    LUNGFUNG
+                                  Lung Fung
+                                  龍豐
+                                  龙丰
+Item / 項目 / 项目   Description / 說明 / 说明                Note / 細節 / 细节
+prices           Product single price in the chain.   Data Type: Numeric
+                 於該超市的貨品單件價格。                         資料類型: 數字
+   •   price     于该超市的货品单件价格。                         资料类型: 数字
+Item / 項目 / 项目           Description / 說明 / 说明                Note / 細節 / 细节
+offers                   Supermarket code listed as follow.   Data Type: Text
+                         超市代號資料如下。                            資料類型: 文字
+   •   supermarketCode   超市代号资料如下。                            资料类型: 文字
+
+                             •    WELLCOME
+                                  Wellcome
+                                  惠康
+                                  惠康
+
+                             •    PARKNSHOP
+                                  PARKnSHOP
+                                  百佳
+                                  百佳
+
+                             •    JASONS
+                                  Market Place
+                                  Market Place
+                                  Market Place
+
+                             •    WATSONS
+                                  Watsons
+                                  屈臣氏
+                                  屈臣氏
+
+                             •    MANNINGS
+                                  Mannings
+                                  萬寧
+                                  万宁
+
+                             •    AEON
+                                  AEON
+                                  AEON
+                                  AEON
+
+                             •    DCHFOOD
+                                  DCH Food Mart
+                                  大昌食品
+                                  大昌食品
+
+                             •    SASA
+                                  Sasa
+                                  莎莎
+                                  莎莎
+
+                             •    LUNGFUNG
+                                  Lung Fung
+                                  龍豐
+                                  龙丰
+Item / 項目 / 项目   Description / 說明 / 说明             Note / 細節 / 细节
+offers           Discount offers in the chain,     Data Type: Text
+                 separated by forward slash (/).   資料類型: 文字
+   •   en        於該超市的貨品優惠，以斜線                     资料类型: 文字
+   •   zh-Hant   (/) 分隔。
+   •   zh-Hans   于该超市的货品优惠，以斜线
+                 (/) 分隔。
+
+                     •   English
+                         英文
+                         英文
+
+                     •   Traditional Chinese
+                         繁體中文
+                         繁体中文
+
+                     •   Simplified Chinese
+                         簡體中文
+                         简体中文
+
