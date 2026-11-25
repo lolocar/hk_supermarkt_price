@@ -92,10 +92,18 @@ export default function ProductPage() {
                   <tr key={p.supermarket_code} className={cls}>
                     <td>{i + 1}</td>
                     <td>
-                      <span className="dot" style={{ background: `var(--store-${p.supermarket_code}, #888)` }} />
-                      {pick(p, 'name', lang)}
-                      {bestIdxs.has(i) && <span className="best-badge">{t('product.lowest')}</span>}
-                      {bestEffIdxs.has(i) && <span className="best-badge eff-badge">{t('product.lowestEff')}</span>}
+                      <div className="store-cell">
+                        <span className="store-line">
+                          <span className="dot" style={{ background: `var(--store-${p.supermarket_code}, #888)` }} />
+                          {pick(p, 'name', lang)}
+                        </span>
+                        {(bestIdxs.has(i) || bestEffIdxs.has(i)) && (
+                          <span className="badge-row">
+                            {bestIdxs.has(i) && <span className="best-badge">{t('product.lowest')}</span>}
+                            {bestEffIdxs.has(i) && <span className="best-badge eff-badge">{t('product.lowestEff')}</span>}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="num price">{fmtPrice(p.price, lang)}
                       {eff ? <small className="eff">{t('product.approxUnit', { p: fmtPrice(eff, lang) })}</small> : null}

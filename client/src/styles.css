@@ -270,6 +270,8 @@ table.cmp { width: 100%; border-collapse: collapse; font-size: 14px; }
 .lg-best { background: var(--accent); }
 .lg-eff { background: var(--eff); }
 .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; }
+.store-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.badge-row { display: flex; gap: 6px; flex-wrap: wrap; margin-left: 16px; }
 .offers { color: var(--muted); font-size: 12.5px; max-width: 340px; }
 
 .chart-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
