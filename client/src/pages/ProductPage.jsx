@@ -36,14 +36,16 @@ export default function ProductPage() {
 
   const m = data.meta;
   const best = data.prices.length ? data.prices[0].price : null;
-  // 正价最平 = 价格最低行（表按价升序，首行）；优惠后最平 = 服务端折算每件实际价的最低行
+  // 正價最平 = 正价最低行；最低價 = 实付价（ep ?? 正价）最低行；并列同价全部标记
   const effs = data.prices.map((p) => p.ep ?? null); // 供「每件約」展示：仅优惠折算价
   // 最低价 = 实付价（有优惠用折算价，无优惠即正价）的全场最低行——
   // 正价可能比其他店的优惠后价还低（如 P000002440），该行应获得「最低价」标签
   const payoffs = data.prices.map((p) => p.ep ?? p.price);
-  let bestEffIdx = -1;
-  let bestEff = Infinity;
-  payoffs.forEach((e, i) => { if (e != null && e < bestEff) { bestEff = e; bestEffIdx = i; } });
+  // 并列同价时所有并列行都标记（正價最平 / 最低價 同理）
+  const minPrice = Math.min(...data.prices.map((p) => p.price));
+  const bestIdxs = new Set(data.prices.flatMap((p, i) => (p.price === minPrice ? [i] : [])));
+  const minPay = Math.min(...payoffs.filter((v) => v != null));
+  const bestEffIdxs = new Set(payoffs.flatMap((v, i) => (v === minPay ? [i] : [])));
 
   return (
     <div className="detail">
@@ -85,15 +87,15 @@ export default function ProductPage() {
             <tbody>
               {data.prices.map((p, i) => {
                 const eff = effs[i];
-                const cls = [i === 0 ? 'best' : '', i === bestEffIdx ? 'best-eff' : ''].filter(Boolean).join(' ');
+                const cls = [bestIdxs.has(i) ? 'best' : '', bestEffIdxs.has(i) ? 'best-eff' : ''].filter(Boolean).join(' ');
                 return (
                   <tr key={p.supermarket_code} className={cls}>
                     <td>{i + 1}</td>
                     <td>
                       <span className="dot" style={{ background: `var(--store-${p.supermarket_code}, #888)` }} />
                       {pick(p, 'name', lang)}
-                      {i === 0 && <span className="best-badge">{t('product.lowest')}</span>}
-                      {i === bestEffIdx && <span className="best-badge eff-badge">{t('product.lowestEff')}</span>}
+                      {bestIdxs.has(i) && <span className="best-badge">{t('product.lowest')}</span>}
+                      {bestEffIdxs.has(i) && <span className="best-badge eff-badge">{t('product.lowestEff')}</span>}
                     </td>
                     <td className="num price">{fmtPrice(p.price, lang)}
                       {eff ? <small className="eff">{t('product.approxUnit', { p: fmtPrice(eff, lang) })}</small> : null}

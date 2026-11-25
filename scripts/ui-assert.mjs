@@ -144,6 +144,19 @@ ok('同一行两徽章（正價最平 + 最低價）', row0badges.length === 2
   && row0badges.some((x) => x.includes('正價最平')) && row0badges.some((x) => x.includes('最低價')));
 ok('全场最低价徽章仅此一家', (await page.locator('.eff-badge').count()) === 1);
 
+// 同价并列：并列最低价的所有商店都要有标志（P000000003 百佳/惠康同 $34.5，无优惠）
+await page.goto(`${BASE}/#/product/P000000003`, { waitUntil: 'networkidle' });
+await page.waitForSelector('table.cmp');
+await page.waitForTimeout(600);
+const tieBest = await page.locator('table.cmp tbody tr.best').count();
+const tieEff = await page.locator('table.cmp tbody tr.best-eff').count();
+ok('正價最平并列：所有并列行都高亮', tieBest === 2);
+ok('最低價并列：所有并列行都标记', tieEff === 2);
+const tieBadges = await page.$$eval('table.cmp tbody tr.best',
+  (trs) => trs.map((tr) => tr.querySelectorAll('.best-badge').length));
+ok('每个并列行都有「正價最平＋最低價」双徽章', tieBadges.length === 2 && tieBadges.every((n) => n === 2));
+ok('非并列行无徽章', (await page.locator('table.cmp tbody tr:not(.best) .best-badge').count()) === 0);
+
 // 走势图按优惠后价 / 正价切换（默认优惠价）
 await page.goto(`${BASE}/#/product/P000000002`, { waitUntil: 'networkidle' });
 await page.waitForSelector('canvas');
