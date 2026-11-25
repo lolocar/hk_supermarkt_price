@@ -118,19 +118,31 @@ ok('DATA.GOV.HK 致谢与免责链接', await page.locator('.ack').first().inner
 const bestCnt = await page.locator('table.cmp tbody tr.best').count();
 const effCnt = await page.locator('table.cmp tbody tr.best-eff').count();
 ok('正价最平高亮存在', bestCnt === 1);
-ok('优惠后最平高亮存在', effCnt === 1);
+ok('最低价高亮存在（最低价行与正价最平行不同）', effCnt === 1);
 const bestStore = await page.locator('table.cmp tbody tr.best td:nth-child(2)').innerText();
 const effStore = await page.locator('table.cmp tbody tr.best-eff td:nth-child(2)').innerText();
 ok(`双高亮为不同超市（${bestStore.split('\n')[0]} vs ${effStore.split('\n')[0]}）`, bestStore !== effStore);
 ok('双徽章文字', (await page.locator('.best-badge').count()) === 2
   && (await page.locator('.eff-badge').count()) === 1
-  && (await page.locator('.eff-badge').innerText()).includes('優惠後最平'));
+  && (await page.locator('.eff-badge').innerText()).includes('最低價')
+  && (await page.locator('.best-badge').first().innerText()).includes('正價最平'));
 const bestBg = await page.locator('table.cmp tbody tr.best td').first().evaluate((e) => getComputedStyle(e).backgroundColor);
 const effBg = await page.locator('table.cmp tbody tr.best-eff td').first().evaluate((e) => getComputedStyle(e).backgroundColor);
 ok(`两种高亮颜色不同（${bestBg} vs ${effBg}）`, bestBg !== effBg);
 ok('图例存在', (await page.locator('.legend').count()) === 1);
 const cmp = await page.$$eval('table.cmp tbody tr .price', (els) => els.map((e) => Number.parseFloat((e.firstChild?.textContent ?? e.textContent).replace(/[^0-9.]/g, ''))));
 ok(`比价表升序（${cmp.length} 间超市）`, cmp.length >= 3 && cmp.every((v, i) => i === 0 || v >= cmp[i - 1]));
+
+// 最低价 = 实付最低：无优惠商店的正价若低于他店优惠后价，最低价标签应归它（P000002440）
+await page.goto(`${BASE}/#/product/P000002440`, { waitUntil: 'networkidle' });
+await page.waitForSelector('table.cmp');
+await page.waitForTimeout(600);
+const row0cls = String(await page.getAttribute('table.cmp tbody tr', 'class'));
+ok('正价低于他店优惠后价 → 首行同时带 best 与 best-eff（双标签）', /\bbest\b/.test(row0cls) && /best-eff/.test(row0cls));
+const row0badges = await page.$$eval('table.cmp tbody tr:first-child .best-badge', (els) => els.map((e) => e.textContent));
+ok('同一行两徽章（正價最平 + 最低價）', row0badges.length === 2
+  && row0badges.some((x) => x.includes('正價最平')) && row0badges.some((x) => x.includes('最低價')));
+ok('全场最低价徽章仅此一家', (await page.locator('.eff-badge').count()) === 1);
 
 // 走势图按优惠后价 / 正价切换（默认优惠价）
 await page.goto(`${BASE}/#/product/P000000002`, { waitUntil: 'networkidle' });

@@ -37,10 +37,13 @@ export default function ProductPage() {
   const m = data.meta;
   const best = data.prices.length ? data.prices[0].price : null;
   // 正价最平 = 价格最低行（表按价升序，首行）；优惠后最平 = 服务端折算每件实际价的最低行
-  const effs = data.prices.map((p) => p.ep ?? null);
+  const effs = data.prices.map((p) => p.ep ?? null); // 供「每件約」展示：仅优惠折算价
+  // 最低价 = 实付价（有优惠用折算价，无优惠即正价）的全场最低行——
+  // 正价可能比其他店的优惠后价还低（如 P000002440），该行应获得「最低价」标签
+  const payoffs = data.prices.map((p) => p.ep ?? p.price);
   let bestEffIdx = -1;
   let bestEff = Infinity;
-  effs.forEach((e, i) => { if (e != null && e < bestEff) { bestEff = e; bestEffIdx = i; } });
+  payoffs.forEach((e, i) => { if (e != null && e < bestEff) { bestEff = e; bestEffIdx = i; } });
 
   return (
     <div className="detail">
